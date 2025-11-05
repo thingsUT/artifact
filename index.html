@@ -241,11 +241,6 @@
             cursor: pointer;
         }
         
-        .checklist-item.completed {
-            text-decoration: line-through;
-            opacity: 0.7;
-        }
-        
         .result-preview {
             background: #fff5f0;
             border: 2px solid #bf5700;
@@ -290,11 +285,6 @@
             margin-bottom: 20px;
         }
         
-        .celebration .emoji {
-            font-size: 4em;
-            margin: 20px 0;
-        }
-        
         @media (max-width: 600px) {
             .decision-cards {
                 grid-template-columns: 1fr;
@@ -328,11 +318,11 @@
                 <p>In the next few minutes, you'll create your own AI assistant that can answer questions using your actual documents and knowledge. No coding required!</p>
                 
                 <div class="tip">
-                    <strong>💡 Tip:</strong> Think about something you explain repeatedly at work. That's what we'll automate today!
+                    <strong>Tip:</strong> Think about something you explain repeatedly at work. That's what we'll automate today!
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-primary" onclick="nextStep()">Let's Start! →</button>
+                    <button class="btn btn-primary" onclick="goToStep(2)">Let's Start →</button>
                 </div>
             </div>
             
@@ -342,27 +332,27 @@
                 <p>Choose the type of assistant that would help you most:</p>
                 
                 <div class="decision-cards" id="problemCards">
-                    <div class="card" onclick="selectCard(this, 'problem', 'faq')">
+                    <div class="card" onclick="selectProblem(this, 'faq')">
                         <h3>FAQ Bot</h3>
                         <p>Answers common questions automatically</p>
                     </div>
-                    <div class="card" onclick="selectCard(this, 'problem', 'process')">
+                    <div class="card" onclick="selectProblem(this, 'process')">
                         <h3>Process Guide</h3>
                         <p>Walks through step-by-step procedures</p>
                     </div>
-                    <div class="card" onclick="selectCard(this, 'problem', 'policy')">
+                    <div class="card" onclick="selectProblem(this, 'policy')">
                         <h3>Policy Helper</h3>
                         <p>Instant answers about rules & guidelines</p>
                     </div>
-                    <div class="card" onclick="selectCard(this, 'problem', 'email')">
+                    <div class="card" onclick="selectProblem(this, 'email')">
                         <h3>Email Coach</h3>
                         <p>Helps draft and improve professional emails</p>
                     </div>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()" disabled id="step2Next">Continue →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(1)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToStep(3)" disabled id="step2Next">Continue →</button>
                 </div>
             </div>
             
@@ -372,19 +362,19 @@
                 <p>Pick the option that matches your needs:</p>
                 
                 <div class="decision-cards" id="platformCards">
-                    <div class="card" onclick="selectCard(this, 'platform', 'chat')">
+                    <div class="card" onclick="selectPlatform(this, 'chat')">
                         <h3>Copilot Chat</h3>
                         <p><strong>Easiest (5 min)</strong><br>Personal use, right in Microsoft 365</p>
                     </div>
-                    <div class="card" onclick="selectCard(this, 'platform', 'studio')">
+                    <div class="card" onclick="selectPlatform(this, 'studio')">
                         <h3>Copilot Studio</h3>
                         <p><strong>More Features (15 min)</strong><br>Collaboration in an environment and premium options</p>
                     </div>
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()" disabled id="step3Next">Continue →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(2)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToStep(4)" disabled id="step3Next">Continue →</button>
                 </div>
             </div>
             
@@ -394,17 +384,17 @@
                 
                 <div class="input-group">
                     <label for="agentName">What should we call your agent?</label>
-                    <input type="text" id="agentName" placeholder="e.g., Benefits Helper, IT Support Bot" oninput="updatePreview()">
+                    <input type="text" id="agentName" placeholder="e.g., Benefits Helper, IT Support Bot" oninput="updateData()">
                 </div>
                 
                 <div class="input-group">
                     <label for="agentTopic">What topic will it help with?</label>
-                    <input type="text" id="agentTopic" placeholder="e.g., employee benefits, password resets" oninput="updatePreview()">
+                    <input type="text" id="agentTopic" placeholder="e.g., employee benefits, password resets" oninput="updateData()">
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(3)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToStep(5)">Continue →</button>
                 </div>
             </div>
             
@@ -419,7 +409,7 @@
                 
                 <div class="input-group">
                     <label for="instructions">Customize the instructions:</label>
-                    <textarea id="instructions" oninput="updatePreview()"></textarea>
+                    <textarea id="instructions" oninput="updateData()"></textarea>
                 </div>
                 
                 <div class="tip">
@@ -427,8 +417,8 @@
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(4)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToStep(6)">Continue →</button>
                 </div>
             </div>
             
@@ -439,15 +429,15 @@
                 
                 <div class="checklist">
                     <h3>Choose your knowledge type:</h3>
-                    <div class="checklist-item" onclick="toggleCheck(this)">
+                    <div class="checklist-item" onclick="toggleCheckbox(this)">
                         <input type="checkbox" id="doc">
                         <label for="doc">Upload a document (PDF, Word)</label>
                     </div>
-                    <div class="checklist-item" onclick="toggleCheck(this)">
+                    <div class="checklist-item" onclick="toggleCheckbox(this)">
                         <input type="checkbox" id="web">
                         <label for="web">Add a website URL</label>
                     </div>
-                    <div class="checklist-item" onclick="toggleCheck(this)">
+                    <div class="checklist-item" onclick="toggleCheckbox(this)">
                         <input type="checkbox" id="share">
                         <label for="share">Connect SharePoint folder</label>
                     </div>
@@ -455,12 +445,12 @@
                 
                 <div class="input-group">
                     <label for="knowledge">Describe your knowledge source:</label>
-                    <input type="text" id="knowledge" placeholder="e.g., Employee handbook PDF, Company wiki site">
+                    <input type="text" id="knowledge" placeholder="e.g., Employee handbook PDF, Company wiki site" oninput="updateData()">
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(5)">← Back</button>
+                    <button class="btn btn-primary" onclick="goToStep(7)">Continue →</button>
                 </div>
             </div>
             
@@ -489,15 +479,15 @@
                 </div>
                 
                 <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="generateSummary()">See Your Plan →</button>
+                    <button class="btn btn-secondary" onclick="goToStep(6)">← Back</button>
+                    <button class="btn btn-primary" onclick="createSummary()">See Your Plan →</button>
                 </div>
             </div>
             
             <!-- Step 8: Summary -->
             <div class="step" data-step="8">
                 <h2>Your Agent Blueprint</h2>
-                <p>Here's what you'll build:</p>
+                <p>Review your configuration and get started building:</p>
                 
                 <div class="result-preview">
                     <h3>Agent Configuration</h3>
@@ -506,55 +496,58 @@
                     </div>
                 </div>
                 
-                <div class="checklist">
-                    <h3>Next Steps:</h3>
-                    <div class="checklist-item">
-                        <input type="checkbox" disabled>
-                        <label>1. Open <a href="https://copilot.microsoft.com" target="_blank" style="color: #bf5700;">Copilot Chat</a> or <a href="https://copilotstudio.microsoft.com" target="_blank" style="color: #bf5700;">Copilot Studio</a></label>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" disabled>
-                        <label>2. Create new agent with these settings</label>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" disabled>
-                        <label>3. Add your knowledge source</label>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" disabled>
-                        <label>4. Test with your questions</label>
-                    </div>
-                    <div class="checklist-item">
-                        <input type="checkbox" disabled>
-                        <label>5. Share with your team!</label>
+                <div class="tip" style="margin-top: 20px;">
+                    <strong>Your Instructions:</strong>
+                    <div style="background: white; padding: 15px; margin-top: 10px; border-radius: 8px; font-family: 'Courier New', monospace; white-space: pre-wrap;" id="instructionPreview">
+                        Loading instructions...
                     </div>
                 </div>
                 
-                <div class="buttons">
-                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
-                    <button class="btn btn-primary" onclick="celebrate()">I'm Ready to Build! 🎉</button>
+                <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px;">
+                    <h4 style="color: #bf5700; margin-bottom: 15px;">Ready to Build?</h4>
+                    <p>Open your chosen platform to create your agent:</p>
+                    <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+                        <a href="https://copilot.microsoft.com" target="_blank" style="padding: 10px 20px; background: #bf5700; color: white; text-decoration: none; border-radius: 8px; display: inline-block;">Open Copilot Chat →</a>
+                        <a href="https://copilotstudio.microsoft.com" target="_blank" style="padding: 10px 20px; background: #bf5700; color: white; text-decoration: none; border-radius: 8px; display: inline-block;">Open Copilot Studio →</a>
+                    </div>
+                </div>
+                
+                <div class="buttons" style="margin-top: 30px;">
+                    <button class="btn btn-secondary" onclick="goToStep(7)">← Back</button>
+                    <button class="btn btn-primary" onclick="showCopyVersion()">Get Copy-Paste Version →</button>
                 </div>
             </div>
             
-            <!-- Step 9: Celebration -->
+            <!-- Step 9: Copy Version -->
             <div class="step" data-step="9">
                 <div class="celebration">
                     <h2>You're Ready!</h2>
-                    <p>You've just planned your first AI agent. Now go build it for real!</p>
+                    <p>You've successfully planned your first AI agent!</p>
                     
                     <div class="tip" style="text-align: left; margin-top: 30px;">
-                        <strong>Remember:</strong>
-                        <ul style="margin-top: 10px; padding-left: 20px;">
-                            <li>Start simple - you can always add more later</li>
-                            <li>Test with real questions</li>
-                            <li>Share with one person first</li>
-                            <li>Iterate based on feedback</li>
-                        </ul>
+                        <strong>Your plan is ready to copy!</strong> 
+                        <p style="margin-top: 10px;">Select the text below and copy it, or click the button:</p>
+                    </div>
+                    
+                    <div class="template-box" style="margin: 20px 0;">
+                        <textarea id="finalCopyPlan" style="width: 100%; height: 350px; font-family: 'Courier New', monospace; padding: 15px; border: 2px solid #bf5700; border-radius: 8px; background: white;" readonly>Your plan will appear here...</textarea>
                     </div>
                     
                     <div class="buttons">
-                        <button class="btn btn-secondary" onclick="restart()">Start Over</button>
-                        <button class="btn btn-primary" onclick="downloadPlan()">Download My Plan</button>
+                        <button class="btn btn-secondary" onclick="startOver()">Create Another Agent</button>
+                        <button class="btn btn-primary" onclick="copyPlan()">Copy My Plan</button>
+                    </div>
+                    
+                    <div id="copySuccess" style="display: none; margin-top: 15px; padding: 15px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 8px; text-align: center;">
+                        ✓ Copied! Paste it into any document to save it.
+                    </div>
+                    
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #e0e0e0; text-align: center;">
+                        <p style="margin-bottom: 15px; color: #666;">Ready to build your agent? Visit:</p>
+                        <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                            <a href="https://copilot.microsoft.com" target="_blank" style="padding: 10px 20px; background: #bf5700; color: white; text-decoration: none; border-radius: 8px; display: inline-block;">Open Copilot Chat →</a>
+                            <a href="https://copilotstudio.microsoft.com" target="_blank" style="padding: 10px 20px; background: #bf5700; color: white; text-decoration: none; border-radius: 8px; display: inline-block;">Open Copilot Studio →</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -562,42 +555,82 @@
     </div>
     
     <script>
+        // Global variables
         let currentStep = 1;
-        let totalSteps = 9;
-        let selections = {
+        const totalSteps = 9;
+        let agentConfig = {
             problem: '',
             platform: '',
-            agentName: '',
+            name: '',
             topic: '',
             instructions: '',
             knowledge: '',
             testQuestions: []
         };
         
+        // Navigation functions
+        function goToStep(step) {
+            currentStep = step;
+            showCurrentStep();
+            updateProgress();
+            
+            // Update instruction template when reaching step 5
+            if (step === 5) {
+                loadInstructionTemplate();
+            }
+            
+            // Update test questions when reaching step 7
+            if (step === 7) {
+                loadTestQuestions();
+            }
+        }
+        
+        function showCurrentStep() {
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+        }
+        
         function updateProgress() {
             const progress = (currentStep / totalSteps) * 100;
             document.getElementById('progress').style.width = progress + '%';
         }
         
-        function showStep(step) {
-            document.querySelectorAll('.step').forEach(s => {
-                s.classList.remove('active');
+        // Selection functions
+        function selectProblem(card, type) {
+            document.querySelectorAll('#problemCards .card').forEach(c => {
+                c.classList.remove('selected');
             });
-            document.querySelector(`[data-step="${step}"]`).classList.add('active');
-            updateProgress();
-            
-            // Update instructions template when reaching step 5
-            if (step === 5) {
-                updateInstructionTemplate();
-            }
-            
-            // Update test questions when reaching step 7
-            if (step === 7) {
-                updateTestQuestions();
-            }
+            card.classList.add('selected');
+            agentConfig.problem = type;
+            document.getElementById('step2Next').disabled = false;
         }
         
-        function updateInstructionTemplate() {
+        function selectPlatform(card, type) {
+            document.querySelectorAll('#platformCards .card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            card.classList.add('selected');
+            agentConfig.platform = type;
+            document.getElementById('step3Next').disabled = false;
+        }
+        
+        function toggleCheckbox(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        }
+        
+        // Data update function
+        function updateData() {
+            agentConfig.name = document.getElementById('agentName')?.value || '';
+            agentConfig.topic = document.getElementById('agentTopic')?.value || '';
+            agentConfig.instructions = document.getElementById('instructions')?.value || '';
+            agentConfig.knowledge = document.getElementById('knowledge')?.value || '';
+        }
+        
+        // Template functions
+        function loadInstructionTemplate() {
             const templates = {
                 'faq': `You are a helpful FAQ assistant for our organization.
 You answer common questions using the provided knowledge sources.
@@ -652,12 +685,12 @@ Always adapt tone to the recipient and purpose.
 For sensitive topics, suggest reviewing with a supervisor.`
             };
             
-            const template = templates[selections.problem] || templates['faq'];
+            const template = templates[agentConfig.problem] || templates['faq'];
             document.getElementById('instructionTemplate').textContent = template;
             document.getElementById('instructions').value = template;
         }
         
-        function updateTestQuestions() {
+        function loadTestQuestions() {
             const questions = {
                 'faq': [
                     "What are the office hours for the main building?",
@@ -681,101 +714,62 @@ For sensitive topics, suggest reviewing with a supervisor.`
                 ]
             };
             
-            const selected = questions[selections.problem] || questions['faq'];
+            const selected = questions[agentConfig.problem] || questions['faq'];
             document.getElementById('testQ1').value = selected[0];
             document.getElementById('testQ2').value = selected[1];
             document.getElementById('testQ3').value = selected[2];
         }
         
-        function nextStep() {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        }
-        
-        function previousStep() {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        }
-        
-        function selectCard(card, type, value) {
-            // Clear other selections
-            card.parentElement.querySelectorAll('.card').forEach(c => {
-                c.classList.remove('selected');
-            });
-            card.classList.add('selected');
-            selections[type] = value;
-            
-            // Enable next button
-            if (type === 'problem') {
-                document.getElementById('step2Next').disabled = false;
-            } else if (type === 'platform') {
-                document.getElementById('step3Next').disabled = false;
-            }
-        }
-        
-        function toggleCheck(item) {
-            const checkbox = item.querySelector('input[type="checkbox"]');
-            checkbox.checked = !checkbox.checked;
-        }
-        
-        function updatePreview() {
-            selections.agentName = document.getElementById('agentName')?.value || '';
-            selections.topic = document.getElementById('agentTopic')?.value || '';
-            selections.instructions = document.getElementById('instructions')?.value || '';
-            selections.knowledge = document.getElementById('knowledge')?.value || '';
-        }
-        
-        function generateSummary() {
-            selections.testQuestions = [
+        // Summary functions
+        function createSummary() {
+            // Gather test questions
+            agentConfig.testQuestions = [
                 document.getElementById('testQ1')?.value || '',
                 document.getElementById('testQ2')?.value || '',
                 document.getElementById('testQ3')?.value || ''
             ].filter(q => q);
             
+            // Update preview
             const preview = document.getElementById('finalPreview');
-            preview.innerHTML = `<strong>Name:</strong> ${selections.agentName || 'My Agent'}
+            preview.innerHTML = `<strong>Name:</strong> ${agentConfig.name || 'My Agent'}
 
-<strong>Platform:</strong> ${selections.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
+<strong>Platform:</strong> ${agentConfig.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
 
-<strong>Type:</strong> ${selections.problem.charAt(0).toUpperCase() + selections.problem.slice(1)} Assistant
+<strong>Type:</strong> ${agentConfig.problem.charAt(0).toUpperCase() + agentConfig.problem.slice(1)} Assistant
 
-<strong>Topic:</strong> ${selections.topic || 'General help'}
+<strong>Topic:</strong> ${agentConfig.topic || 'General help'}
 
-<strong>Instructions:</strong>
-${selections.instructions || 'Standard instructions'}
+<strong>Knowledge Source:</strong> ${agentConfig.knowledge || 'To be added'}
 
-<strong>Knowledge Source:</strong> ${selections.knowledge || 'To be added'}
-
-<strong>Test Questions:</strong>
-${selections.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`;
+<strong>Test Questions / Suggested Prompts:</strong>
+${agentConfig.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`;
             
-            nextStep();
+            // Update instruction preview
+            document.getElementById('instructionPreview').textContent = agentConfig.instructions || 'Standard instructions';
+            
+            goToStep(8);
         }
         
-        function finishPlan() {
+        function showCopyVersion() {
             const plan = `MY COPILOT AGENT PLAN
 =====================
 
-Agent Name: ${selections.agentName || 'My Agent'}
-Platform: ${selections.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
-Type: ${selections.problem} Assistant
-Topic: ${selections.topic || 'General help'}
+Agent Name: ${agentConfig.name || 'My Agent'}
+Platform: ${agentConfig.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
+Type: ${agentConfig.problem} Assistant
+Topic: ${agentConfig.topic || 'General help'}
 
 INSTRUCTIONS:
-${selections.instructions || 'Standard instructions'}
+${agentConfig.instructions || 'Standard instructions'}
 
 KNOWLEDGE SOURCE:
-${selections.knowledge || 'To be added'}
+${agentConfig.knowledge || 'To be added'}
 
 TEST QUESTIONS / SUGGESTED PROMPTS:
-${selections.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}
+${agentConfig.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}
 
 NEXT STEPS:
-1. Open ${selections.platform === 'chat' ? 'Microsoft 365 Copilot (https://copilot.microsoft.com)' : 'Copilot Studio (https://copilotstudio.microsoft.com)'}
+1. Open ${agentConfig.platform === 'chat' ? 'Microsoft 365 Copilot (https://copilot.microsoft.com)' : 'Copilot Studio (https://copilotstudio.microsoft.com)'}
 2. Create new agent
 3. Copy these settings
 4. Add knowledge source
@@ -786,39 +780,38 @@ Created with Copilot Studio Interactive Guide
 ${new Date().toLocaleDateString()}`;
             
             document.getElementById('finalCopyPlan').value = plan;
-            nextStep();
+            goToStep(9);
         }
         
-        function copyFinalPlan() {
+        function copyPlan() {
             const copyText = document.getElementById('finalCopyPlan');
             copyText.select();
-            copyText.setSelectionRange(0, 99999); // For mobile devices
+            copyText.setSelectionRange(0, 99999);
             
             try {
                 document.execCommand('copy');
-                document.getElementById('finalCopySuccess').style.display = 'block';
+                document.getElementById('copySuccess').style.display = 'block';
                 setTimeout(() => {
-                    document.getElementById('finalCopySuccess').style.display = 'none';
+                    document.getElementById('copySuccess').style.display = 'none';
                 }, 3000);
             } catch (err) {
                 alert('Please select the text and copy manually (Ctrl+C or Cmd+C)');
             }
         }
         
-        function restart() {
-            currentStep = 1;
-            selections = {
+        function startOver() {
+            // Reset config
+            agentConfig = {
                 problem: '',
                 platform: '',
-                agentName: '',
+                name: '',
                 topic: '',
                 instructions: '',
                 knowledge: '',
                 testQuestions: []
             };
-            showStep(1);
             
-            // Reset all inputs
+            // Reset UI
             document.querySelectorAll('input[type="text"], textarea').forEach(input => {
                 input.value = '';
             });
@@ -828,7 +821,12 @@ ${new Date().toLocaleDateString()}`;
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
                 cb.checked = false;
             });
-            document.getElementById('finalCopySuccess').style.display = 'none';
+            document.getElementById('step2Next').disabled = true;
+            document.getElementById('step3Next').disabled = true;
+            document.getElementById('copySuccess').style.display = 'none';
+            
+            // Go to start
+            goToStep(1);
         }
         
         // Initialize
