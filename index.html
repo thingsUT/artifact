@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copilot Studio Interactive Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #bf5700 0%, #f58025 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #bf5700 0%, #f58025 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .header .subtitle {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-top: 15px;
+            font-style: italic;
+        }
+        
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .step h2 {
+            color: #bf5700;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        
+        .decision-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .card:hover {
+            border-color: #bf5700;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(191, 87, 0, 0.2);
+        }
+        
+        .card.selected {
+            background: linear-gradient(135deg, #bf5700 0%, #f58025 100%);
+            color: white;
+            border-color: #bf5700;
+        }
+        
+        .card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: #bf5700;
+        }
+        
+        .input-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .template-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #bf5700;
+        }
+        
+        .template-box code {
+            display: block;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            color: #333;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #bf5700 0%, #f58025 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(191, 87, 0, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .checklist {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checklist-item.completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+        
+        .result-preview {
+            background: #fff5f0;
+            border: 2px solid #bf5700;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .result-preview h3 {
+            color: #bf5700;
+            margin-bottom: 15px;
+        }
+        
+        .result-preview .preview-content {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        
+        .tip {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+        
+        .tip strong {
+            color: #856404;
+        }
+        
+        .celebration {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .celebration h2 {
+            font-size: 2em;
+            color: #bf5700;
+            margin-bottom: 20px;
+        }
+        
+        .celebration .emoji {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .decision-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Build Your First Copilot Agent</h1>
+            <p>Interactive step-by-step guide for beginners</p>
+            <div class="subtitle">The University of Texas at Austin</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <!-- Step 1: Welcome -->
+            <div class="step active" data-step="1">
+                <h2>Welcome! Let's Build Something Useful</h2>
+                <p>In the next few minutes, you'll create your own AI assistant that can answer questions using your actual documents and knowledge. No coding required!</p>
+                
+                <div class="tip">
+                    <strong>💡 Tip:</strong> Think about something you explain repeatedly at work. That's what we'll automate today!
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="nextStep()">Let's Start! →</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Problem Discovery -->
+            <div class="step" data-step="2">
+                <h2>What Problem Should We Solve?</h2>
+                <p>Choose the type of assistant that would help you most:</p>
+                
+                <div class="decision-cards" id="problemCards">
+                    <div class="card" onclick="selectCard(this, 'problem', 'faq')">
+                        <h3>FAQ Bot</h3>
+                        <p>Answers common questions automatically</p>
+                    </div>
+                    <div class="card" onclick="selectCard(this, 'problem', 'process')">
+                        <h3>Process Guide</h3>
+                        <p>Walks through step-by-step procedures</p>
+                    </div>
+                    <div class="card" onclick="selectCard(this, 'problem', 'policy')">
+                        <h3>Policy Helper</h3>
+                        <p>Instant answers about rules & guidelines</p>
+                    </div>
+                    <div class="card" onclick="selectCard(this, 'problem', 'email')">
+                        <h3>Email Coach</h3>
+                        <p>Helps draft and improve professional emails</p>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled id="step2Next">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Choose Platform -->
+            <div class="step" data-step="3">
+                <h2>Where Should We Build It?</h2>
+                <p>Pick the option that matches your needs:</p>
+                
+                <div class="decision-cards" id="platformCards">
+                    <div class="card" onclick="selectCard(this, 'platform', 'chat')">
+                        <h3>Copilot Chat</h3>
+                        <p><strong>Easiest (5 min)</strong><br>Personal use, right in Microsoft 365</p>
+                    </div>
+                    <div class="card" onclick="selectCard(this, 'platform', 'studio')">
+                        <h3>Copilot Studio</h3>
+                        <p><strong>More Features (15 min)</strong><br>Collaboration in an environment and premium options</p>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()" disabled id="step3Next">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Name Your Agent -->
+            <div class="step" data-step="4">
+                <h2>Name Your Assistant</h2>
+                
+                <div class="input-group">
+                    <label for="agentName">What should we call your agent?</label>
+                    <input type="text" id="agentName" placeholder="e.g., Benefits Helper, IT Support Bot" oninput="updatePreview()">
+                </div>
+                
+                <div class="input-group">
+                    <label for="agentTopic">What topic will it help with?</label>
+                    <input type="text" id="agentTopic" placeholder="e.g., employee benefits, password resets" oninput="updatePreview()">
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Create Instructions -->
+            <div class="step" data-step="5">
+                <h2>Write Instructions for Your Agent</h2>
+                <p>Tell your agent how to behave. Use this template as a starting point:</p>
+                
+                <div class="template-box">
+                    <code id="instructionTemplate">Loading template...</code>
+                </div>
+                
+                <div class="input-group">
+                    <label for="instructions">Customize the instructions:</label>
+                    <textarea id="instructions" oninput="updatePreview()"></textarea>
+                </div>
+                
+                <div class="tip">
+                    <strong>Tip:</strong> Good instructions include formatting rules, tone guidelines, and specific behaviors. This is where you make your agent truly helpful!
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 6: Add Knowledge -->
+            <div class="step" data-step="6">
+                <h2>Make Your Agent Smart</h2>
+                <p>What knowledge source will your agent use?</p>
+                
+                <div class="checklist">
+                    <h3>Choose your knowledge type:</h3>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" id="doc">
+                        <label for="doc">Upload a document (PDF, Word)</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" id="web">
+                        <label for="web">Add a website URL</label>
+                    </div>
+                    <div class="checklist-item" onclick="toggleCheck(this)">
+                        <input type="checkbox" id="share">
+                        <label for="share">Connect SharePoint folder</label>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="knowledge">Describe your knowledge source:</label>
+                    <input type="text" id="knowledge" placeholder="e.g., Employee handbook PDF, Company wiki site">
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue →</button>
+                </div>
+            </div>
+            
+            <!-- Step 7: Test Questions -->
+            <div class="step" data-step="7">
+                <h2>Plan Your Testing</h2>
+                <p>What questions will people actually ask your agent? These can also become your suggested prompts.</p>
+                
+                <div class="input-group">
+                    <label for="testQ1">Test Question 1:</label>
+                    <input type="text" id="testQ1" placeholder="e.g., How many vacation days do I have?">
+                </div>
+                
+                <div class="input-group">
+                    <label for="testQ2">Test Question 2:</label>
+                    <input type="text" id="testQ2" placeholder="e.g., What's the process for requesting time off?">
+                </div>
+                
+                <div class="input-group">
+                    <label for="testQ3">Test Question 3:</label>
+                    <input type="text" id="testQ3" placeholder="e.g., Who approves leave requests?">
+                </div>
+                
+                <div class="tip">
+                    <strong>Note:</strong> These test questions can be added as suggested prompts in your agent to help users get started!
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="generateSummary()">See Your Plan →</button>
+                </div>
+            </div>
+            
+            <!-- Step 8: Summary -->
+            <div class="step" data-step="8">
+                <h2>Your Agent Blueprint</h2>
+                <p>Here's what you'll build:</p>
+                
+                <div class="result-preview">
+                    <h3>Agent Configuration</h3>
+                    <div class="preview-content" id="finalPreview">
+                        Loading your configuration...
+                    </div>
+                </div>
+                
+                <div class="checklist">
+                    <h3>Next Steps:</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" disabled>
+                        <label>1. Open <a href="https://copilot.microsoft.com" target="_blank" style="color: #bf5700;">Copilot Chat</a> or <a href="https://copilotstudio.microsoft.com" target="_blank" style="color: #bf5700;">Copilot Studio</a></label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" disabled>
+                        <label>2. Create new agent with these settings</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" disabled>
+                        <label>3. Add your knowledge source</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" disabled>
+                        <label>4. Test with your questions</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" disabled>
+                        <label>5. Share with your team!</label>
+                    </div>
+                </div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="celebrate()">I'm Ready to Build! 🎉</button>
+                </div>
+            </div>
+            
+            <!-- Step 9: Celebration -->
+            <div class="step" data-step="9">
+                <div class="celebration">
+                    <h2>You're Ready!</h2>
+                    <p>You've just planned your first AI agent. Now go build it for real!</p>
+                    
+                    <div class="tip" style="text-align: left; margin-top: 30px;">
+                        <strong>Remember:</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Start simple - you can always add more later</li>
+                            <li>Test with real questions</li>
+                            <li>Share with one person first</li>
+                            <li>Iterate based on feedback</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button class="btn btn-secondary" onclick="restart()">Start Over</button>
+                        <button class="btn btn-primary" onclick="downloadPlan()">Download My Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        let totalSteps = 9;
+        let selections = {
+            problem: '',
+            platform: '',
+            agentName: '',
+            topic: '',
+            instructions: '',
+            knowledge: '',
+            testQuestions: []
+        };
+        
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progress').style.width = progress + '%';
+        }
+        
+        function showStep(step) {
+            document.querySelectorAll('.step').forEach(s => {
+                s.classList.remove('active');
+            });
+            document.querySelector(`[data-step="${step}"]`).classList.add('active');
+            updateProgress();
+            
+            // Update instructions template when reaching step 5
+            if (step === 5) {
+                updateInstructionTemplate();
+            }
+            
+            // Update test questions when reaching step 7
+            if (step === 7) {
+                updateTestQuestions();
+            }
+        }
+        
+        function updateInstructionTemplate() {
+            const templates = {
+                'faq': `You are a helpful FAQ assistant for our organization.
+You answer common questions using the provided knowledge sources.
+
+When responding:
+- Format answers with **bold** for key points
+- Use bullet points for lists
+- Keep answers concise (under 3 paragraphs)
+- If you don't know, say "I don't have that information. Please contact [appropriate department]"
+
+Always be professional, friendly, and accurate.
+Never make up information not in your knowledge sources.`,
+                
+                'process': `You are a process guide that helps users complete tasks step-by-step.
+You have access to our standard operating procedures and workflows.
+
+When explaining processes:
+- Number each step clearly (1, 2, 3...)
+- Use **bold** for important actions
+- Include warnings with "⚠️ Important:" for critical steps
+- Add time estimates when available
+- Mention required forms or approvals
+
+Always verify prerequisites before starting instructions.
+If a process has multiple paths, ask clarifying questions first.`,
+                
+                'policy': `You are a policy expert for our organization.
+You provide clear explanations of rules, regulations, and guidelines.
+
+When explaining policies:
+- Start with a brief summary
+- Use **bold** for policy names and key terms
+- Cite specific policy numbers/sections when relevant
+- Format lists of requirements with bullet points
+- Include effective dates and any recent changes
+
+Always direct users to the full policy document for complete details.
+For questions about exceptions, direct to the appropriate authority.`,
+                
+                'email': `You are an email writing coach for professional communication.
+You help draft, edit, and improve business emails.
+
+When helping with emails:
+- Suggest clear subject lines
+- Format with proper business letter structure
+- Use **bold** for key action items
+- Keep tone professional but friendly
+- Include appropriate greetings and closings
+- Highlight calls-to-action
+
+Always adapt tone to the recipient and purpose.
+For sensitive topics, suggest reviewing with a supervisor.`
+            };
+            
+            const template = templates[selections.problem] || templates['faq'];
+            document.getElementById('instructionTemplate').textContent = template;
+            document.getElementById('instructions').value = template;
+        }
+        
+        function updateTestQuestions() {
+            const questions = {
+                'faq': [
+                    "What are the office hours for the main building?",
+                    "How do I reset my password?",
+                    "What's the policy on remote work?"
+                ],
+                'process': [
+                    "How do I submit an expense report?",
+                    "What's the process for requesting new equipment?",
+                    "Walk me through onboarding a new employee"
+                ],
+                'policy': [
+                    "What's our vacation policy?",
+                    "Are there restrictions on social media use?",
+                    "What are the guidelines for travel reimbursement?"
+                ],
+                'email': [
+                    "Help me write a meeting request email",
+                    "How should I respond to a complaint professionally?",
+                    "Draft a project update for my manager"
+                ]
+            };
+            
+            const selected = questions[selections.problem] || questions['faq'];
+            document.getElementById('testQ1').value = selected[0];
+            document.getElementById('testQ2').value = selected[1];
+            document.getElementById('testQ3').value = selected[2];
+        }
+        
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+            }
+        }
+        
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+            }
+        }
+        
+        function selectCard(card, type, value) {
+            // Clear other selections
+            card.parentElement.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('selected');
+            });
+            card.classList.add('selected');
+            selections[type] = value;
+            
+            // Enable next button
+            if (type === 'problem') {
+                document.getElementById('step2Next').disabled = false;
+            } else if (type === 'platform') {
+                document.getElementById('step3Next').disabled = false;
+            }
+        }
+        
+        function toggleCheck(item) {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+        }
+        
+        function updatePreview() {
+            selections.agentName = document.getElementById('agentName')?.value || '';
+            selections.topic = document.getElementById('agentTopic')?.value || '';
+            selections.instructions = document.getElementById('instructions')?.value || '';
+            selections.knowledge = document.getElementById('knowledge')?.value || '';
+        }
+        
+        function generateSummary() {
+            selections.testQuestions = [
+                document.getElementById('testQ1')?.value || '',
+                document.getElementById('testQ2')?.value || '',
+                document.getElementById('testQ3')?.value || ''
+            ].filter(q => q);
+            
+            const preview = document.getElementById('finalPreview');
+            preview.innerHTML = `<strong>Name:</strong> ${selections.agentName || 'My Agent'}
+
+<strong>Platform:</strong> ${selections.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
+
+<strong>Type:</strong> ${selections.problem.charAt(0).toUpperCase() + selections.problem.slice(1)} Assistant
+
+<strong>Topic:</strong> ${selections.topic || 'General help'}
+
+<strong>Instructions:</strong>
+${selections.instructions || 'Standard instructions'}
+
+<strong>Knowledge Source:</strong> ${selections.knowledge || 'To be added'}
+
+<strong>Test Questions:</strong>
+${selections.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}`;
+            
+            nextStep();
+        }
+        
+        function celebrate() {
+            nextStep();
+        }
+        
+        function restart() {
+            currentStep = 1;
+            selections = {
+                problem: '',
+                platform: '',
+                agentName: '',
+                topic: '',
+                instructions: '',
+                knowledge: '',
+                testQuestions: []
+            };
+            showStep(1);
+            
+            // Reset all inputs
+            document.querySelectorAll('input[type="text"], textarea').forEach(input => {
+                input.value = '';
+            });
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+        }
+        
+        function downloadPlan() {
+            const plan = `MY COPILOT AGENT PLAN
+=====================
+
+Agent Name: ${selections.agentName || 'My Agent'}
+Platform: ${selections.platform === 'chat' ? 'Microsoft 365 Copilot Chat' : 'Copilot Studio'}
+Type: ${selections.problem} Assistant
+Topic: ${selections.topic || 'General help'}
+
+INSTRUCTIONS:
+${selections.instructions || 'Standard instructions'}
+
+KNOWLEDGE SOURCE:
+${selections.knowledge || 'To be added'}
+
+TEST QUESTIONS:
+${selections.testQuestions.map((q, i) => `${i + 1}. ${q}`).join('\n')}
+
+NEXT STEPS:
+1. Open ${selections.platform === 'chat' ? 'Microsoft 365 Copilot (https://copilot.microsoft.com)' : 'Copilot Studio (https://copilotstudio.microsoft.com)'}
+2. Create new agent
+3. Copy these settings
+4. Add knowledge source
+5. Test and share!
+
+Created with Copilot Studio Interactive Guide`;
+            
+            const blob = new Blob([plan], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'my-copilot-agent-plan.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>
